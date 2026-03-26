@@ -1,0 +1,23 @@
+name = "echo-dependency-resolver"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[triggers]
+crons = ["0 */6 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "echo-dependency-resolver"
+database_id = "5f7ccd65-5edd-460f-b48b-b2e96935c103"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "613d45086ac046fd9b461dc5529d1e1c"
+
+[[services]]
+binding = "SHARED_BRAIN"
+service = "echo-shared-brain"
+
+[[services]]
+binding = "ALERT_ROUTER"
+service = "echo-alert-router"
