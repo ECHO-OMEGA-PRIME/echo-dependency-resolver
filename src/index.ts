@@ -8,6 +8,7 @@ interface Env {
   CACHE: KVNamespace;
   SHARED_BRAIN: Fetcher;
   ALERT_ROUTER: Fetcher;
+  ECHO_API_KEY: string;
 }
 
 interface ServiceRow {
@@ -80,7 +81,7 @@ const log = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const API_KEY = 'echo-omega-prime-forge-x-2026';
+// API_KEY pulled from env at runtime — never hardcoded
 const CACHE_TTL = 600;
 const START_TIME = Date.now();
 
@@ -268,7 +269,7 @@ async function syncEdgesForService(db: D1Database, serviceName: string, dependen
 
 function authMiddleware(c: any, next: () => Promise<void>): Promise<Response | void> {
   const key = c.req.header('X-Echo-API-Key');
-  if (key !== API_KEY) {
+  if (key !== (c.env.ECHO_API_KEY || '')) {
     return Promise.resolve(apiResponse(false, undefined, 'Unauthorized: invalid or missing X-Echo-API-Key', 401));
   }
   return next();
@@ -1048,7 +1049,7 @@ async function handleCron(env: Env): Promise<void> {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-Echo-API-Key': API_KEY,
+            'X-Echo-API-Key': c.env.ECHO_API_KEY || '',
           },
           body: JSON.stringify({
             role: 'system',
