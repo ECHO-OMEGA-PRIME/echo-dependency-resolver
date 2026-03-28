@@ -298,6 +298,8 @@ app.use('*', async (c, next) => {
 
 // ── Health (no auth) ─────────────────────────────────────────────────────────
 
+app.get("/", (c) => c.json({ service: 'echo-dependency-resolver', status: 'operational' }));
+
 app.get('/health', async (c) => {
   let dbOk = false;
   try {
